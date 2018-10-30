@@ -1,0 +1,226 @@
+<html>
+    <script>
+
+        // hides the dessert menu when scrolling over the otehr menu
+        function closeMenu1()
+        {
+            // Hides different parts of the menu
+            document.getElementById("mainGrid1").style.visibility = "visible";
+            document.getElementById("mainGrid2").style.visibility = "hidden";
+
+            // hides the information presented when hovering over each menu
+            var info = document.getElementsByClassName("menuInfo");
+            for (var i = 0; i < info.length; i++)
+            {
+                info[i].style.visibility = "hidden";
+            }
+
+            // turns the colour of unselected menu elements back to the original colour
+            var elements = document.querySelectorAll(".menuItem");
+            
+            for (var i = 0; i < elements.length; i++)
+            {  
+                // Using strings for colour is much more effective than rgb
+                elements[i].style.backgroundColor = "lightblue";
+            }
+
+        }
+
+        // Same function as above but hides the other menu
+        function closeMenu2()
+        {
+            document.getElementById("mainGrid1").style.visibility = "hidden";
+            document.getElementById("mainGrid2").style.visibility = "visible";
+
+            document.getElementsByClassName("menuInfo");
+            var info = document.getElementsByClassName("menuInfo");
+            for (var i = 0; i < info.length; i++)
+            {
+                info[i].style.visibility = "hidden";
+            }
+
+            var elements = document.querySelectorAll(".menuItem")
+            for (var i = 0; i < elements.length; i++)
+            {
+                elements[i].style.backgroundColor = "lightblue";
+            }
+            
+        }
+
+        function dropDownMenu(menu)
+        {
+            try
+            {
+            var menuTitle = window.document.getElementById(menu + "Title")
+            // background overwrites the gradient to let user know they have looked there
+            // Background colour would be used of background was not set in style
+            menuTitle.style.background = "mediumaquamarine";
+
+            // Gets the holder id and drop down the menus elements
+            var nextMenu = window.document.getElementById(menu + "Holder")
+            
+            nextMenu.style.visibility = "visible";
+            }
+            catch(TypeError)
+            {
+
+            }
+        }
+
+        function showMenuInfo(itemId)
+        {
+            var x = window.event.clientX;
+            var y = window.event.clientY;
+
+            var info = window.document.getElementById(itemId + "Info");
+
+            info.style.visibility = "visible";
+            info.style.left = x;
+            info.style.top = y;
+        }
+
+    </script>
+
+    <head>
+        <style>
+            .grid-container 
+            {
+                display: grid;
+                grid-template-columns: auto auto;
+                padding: 3px;
+                gap: 5px;
+                
+            }
+            .grid-menu
+            {
+                display: grid;
+                grid-template-columns: auto;
+                padding: 3px;
+                gap: 5px;
+            }
+
+            .menuItem
+            {
+                background-color:lightblue;
+                text-align: center;
+                padding: 8px 0;
+                font-size: 30px;
+                background: linear-gradient(to bottom, lightblue, mediumaquamarine);
+                color: white;
+            }
+
+            .menuInfo
+            {
+                background-color: transparent;
+                position: absolute;
+                font-size: 2em;
+                font-style: oblique;
+                color: rebeccapurple;
+                
+                border: 2px dashed black;
+                padding: 25px;
+                background: url(bread.jpg);
+                
+
+            }
+
+        </style>
+    </head>
+
+    <body>
+
+        <!-----------------------------Drop down menus--------------------------------------------->
+        <div class="grid-container">
+            <!-------------------------MAIN MEALS MENU -------------------------------->
+            <div id="mainMenu" onmouseover="dropDownMenu(this.id)" >
+
+                <!-- Placing each individual item in menuItem class is the only way to apply color
+                     Whilst hiding the color of menu items not shown.
+                     Title id allows it to be called by the dropDownMenu function to highlight it-->
+                <div id="mainMenuTitle" class="menuItem" onmouseover="closeMenu1()">
+                    Main Meals
+                </div>
+
+                <!-- Holder id is used so the dropDownMenu() function works correctly-->
+                <div id="mainMenuHolder" style="visibility: hidden" default>
+
+                    <!---------------------Drop down menu grid--------------------------->
+                    <div class="grid-menu" id="mainGrid1">
+                        <!--------------------Main menu: toast---------------------------->
+                        <div id="toast" onmouseover="dropDownMenu(this.id)">
+
+                            <!-- Title & holder id's allows it to be called correctly by dropDownMenu()-->
+                            <div id="toastTitle" class="menuItem" onmouseover="closeMenu1(); showMenuInfo(this.id)">
+                                Toast
+                            </div>
+                        </div>
+                        <!--------------------------------------------------------------->
+
+                        <!-- ----------------Main menu: bread ---------------------- -->
+                        <div id="bread" onmouseover="dropDownMenu(this.id)">
+                            <div id="breadTitle" class="menuItem" onmouseover="closeMenu1(); showMenuInfo(this.id)">
+                                    Bread
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------->
+                    </div>
+                    <!--------------------------------------------------------------------->
+                </div>
+            </div>
+            <!------------------------------------------------------------------------------------>
+
+            <!-----------------------------Dessert Menu------------------------------------>
+            <div id="dessertMenu" class="menu" onmouseover="dropDownMenu(this.id)">
+
+                <div id="dessertMenuTitle" class="menuItem" onmouseover="closeMenu2()">
+                    Desserts
+                </div>
+                
+                <div id="dessertMenuHolder" style="visibility: hidden" default>
+
+                    <div class="grid-menu" id="mainGrid2" >
+
+                        <!------------- Dessert menu sweet bread ---------------------------------------->
+                        <div id="sweetToast" onmouseover="dropDownMenu(this.id)">
+
+                            <!-- Title & holder id's allows it to be called correctly by dropDownMenu()
+                                 CloseMenu clears the other menu items-->
+                            <div id="sweetToastTitle" class="menuItem" onmouseover="closeMenu2(); showMenuInfo(this.id)">
+                                Sweet Toast
+                            </div>
+                        </div>
+                        
+                        <!-- ----------Dessert menu toast ------------------------------------------------>
+                        <div id="sweetBread" onmouseover="dropDownMenu(this.id)">
+                            <div id="sweetBreadTitle" class="menuItem" onmouseover="closeMenu2(); showMenuInfo(this.id); ">
+                                Sweet Bread
+                            </div>       
+                        </div>
+                    </div>
+                </div>    
+            </div>
+            <!------------------------------------------------------------------------->
+            
+        </div>
+        <!-------------------------------------------------------------------------------------------->
+
+
+        <!--------------------Info for each menu item------------------------------------>
+        <div class="menuInfo" id="toastTitleInfo" style="visibility: hidden">
+            <h2>Toast:</h2>
+                <p>Toast is sliced bread that has been browned by exposure to radiant heat. </p>
+        </div>
+        <div class="menuInfo" id="breadTitleInfo" style="visibility: hidden">
+                Bread is a staple food prepared from a dough of flour and water, usually by baking.
+        </div>
+
+
+        <div class="menuInfo" id="sweetToastTitleInfo" style="visibility: hidden" on>
+                    sweet Toast is sliced bread that has been browned by exposure to radiant heat. 
+        </div>
+        <div class="menuInfo" id="sweetBreadTitleInfo" style="visibility: hidden">
+                sweet Bread is a staple food prepared from a dough of flour and water, usually by baking.
+        </div>
+        <!---------------------------------------------------------------------------------->
+    </body>
+</html>

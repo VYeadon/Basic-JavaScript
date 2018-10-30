@@ -1,0 +1,203 @@
+<html>
+    <script>
+
+        function checkForm()
+        {
+            resetError();
+
+            if (checkName() == false | checkEmail() == false | checkNumber() == false | checkPostCode() == false)
+            {
+                return false;
+            }
+            
+        }
+
+        function checkName()
+        {
+            //Name input 
+            //if name is empty
+            if (window.document.getElementById("name").value=="")
+            {
+                window.document.getElementById("nameEmpty").style.visibility = "visible";
+                return false;
+                
+            }
+        }
+        
+        function checkEmail()
+        {
+            //Email input
+            //if email empty
+            var email= window.document.getElementById("email");
+            if (email.value=="")
+            {
+                window.document.getElementById("emailEmpty").style.visibility = "visible";
+                return false;
+            }
+            // @ and . checks for valid email address
+            else
+            {
+                var atCount = 0;
+                var dotCount = 0;
+                for (var i=0; i<email.value.length; i++)
+                {
+                    if (email.value.charAt(i) == "@")
+                    {
+                        atCount++;
+                    }
+                    if (email.value.charAt(i) == ".")
+                    {
+                        dotCount++;
+                    }
+                }
+
+                if (atCount == 0 | dotCount ==0)
+                {
+                    window.document.getElementById("emailError").style.visibility = "visible";
+                    return false;
+                }
+            }
+        }
+
+        function checkNumber()
+        {
+            //phone input
+            //if number empty
+            var number = window.document.getElementById("phone");
+            if (number.value=="")
+            {
+                window.document.getElementById("phoneEmpty").style.visibility = "visible";
+                return false;
+            }
+            else if (number.value.length != 11 | isNaN(parseInt(number.value)))
+            {
+                window.document.getElementById("phoneError").style.visibility = "visible";
+                return false;
+            }
+        }
+
+        function checkPostCode()
+        {
+            var postCode = window.document.getElementById("postCode")
+            if (postCode.value == "")
+            {
+                window.document.getElementById("postCodeEmpty").style.visibility = "visible";
+                return false;
+            }
+            else if (postCode.value.length > 8)
+            {
+                window.document.getElementById("postCodeError").style.visibility = "visible";
+                return false;
+            }
+
+        }
+
+        function resetError()
+        {
+            var errors = window.document.getElementsByClassName("error");
+            for (i=0; i<errors.length; i++)
+            {
+                errors[i].style.visibility = "hidden";
+            }
+        }
+    
+    </script>
+
+    <head>
+        <style>
+
+            .error
+            {
+                color: red;
+                visibility: hidden;
+            }
+
+            .title
+            {
+                font-size: 60;
+                font-family: 'Trebuchet MS'; 
+            }
+
+            .formInput
+            {   
+                left: 100%;
+                display:grid;
+                grid-template-columns: auto;
+                grid-template-rows: auto auto auto auto;
+
+                
+            }
+
+            #form
+            {
+                position: absolute;
+                top: 30ex;
+                left: 33%;
+                width: 33%;
+                height: auto;
+                
+                text-align: center;
+                text-align-last: center;
+
+            }
+
+        </style>
+    </head>
+
+    <form id="form" action="calculator.html" onsubmit="return checkForm()">
+
+        <div class="title">
+            Registration Form
+        </div>
+
+        
+        <div class="formInput">
+
+            <div>
+                <div>Name:</div><input type="text" id="name" name="name">
+                <div class="error" id="nameEmpty" >
+                    *Please enter a value
+                </div>
+                <div class="error" id="nameError" >
+                    " "
+                </div>
+            </div>
+
+            <div>
+                <div>Email Address:</div><input input type="text" id="email" name="email">
+                <div class="error" id="emailEmpty" >
+                    *Please enter a value
+                </div>
+                <span class="error" id="emailError" >
+                    *Invalid email adress
+                </span>
+            </div>
+
+            <div>
+                <div>Phone Number:</div><input input type="text" id="phone" name="phone">
+                <div class="error" id="phoneEmpty" >
+                    *Please enter a value
+                </div>
+                <span class="error" id="phoneError" >
+                    *invalid phone number
+                </span>
+            </div>
+
+
+            <div>
+                <div>Postcode:</div><input input type="text" id="postCode" name="postCode">
+                <div class="error" id="postCodeEmpty">
+                    *Please enter a value
+                </div>
+                <span class="error" id="postCodeError">
+                    *Invalid post code
+                </span>
+            </div>
+
+            </div>
+        <input type="submit" value="login">
+
+        
+    </form>
+
+</html>

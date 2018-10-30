@@ -1,0 +1,324 @@
+<html>
+    <script>
+
+        // gives the bottom border for the game
+        var bottomTop = 500;
+        // gives the top border for the game
+        var topTop = 50;
+        // gives right border for the game
+        var leftLeft = 50;
+        var leftRight = 865;
+
+        // X and Y for the player
+        var gun;
+        var xPositionPlayer = 450;
+        var yPositionPlayer;
+
+        // X and Y for the palyers bullet
+        var bullet;
+        var xPostionBullet; // Set during firing
+        var yPositionBullet = bottomTop + 20;
+
+        // Sets enemy Postion
+        var enemy;
+        var isEnemyMovingRight;
+        var xPositionEnemy = 50;
+        var yPositionEnemy = 100;
+
+
+        function keyListen()
+        {
+            //-----------Player movement and firing-------------
+            gun = window.document.getElementById("gun");
+            bullet = window.document.getElementById("bullet");
+
+            switch(event.keyCode)
+            {
+                case(39):
+                    moveRight(gun);
+                    break;
+
+                case(37):
+                    moveLeft(gun);
+                    break;
+
+                case(32):
+                    fire(bullet);
+                    break;
+
+                
+            }
+            //--------------------------------------------------
+        }
+
+        function moveLeft(objectName)
+        {
+            if (xPositionPlayer>=leftLeft)
+            {
+                xPositionPlayer -= 10;
+
+                objectName.style.left = xPositionPlayer;
+            }
+
+        }
+
+        function moveRight(objectName)
+        {
+            if (xPositionPlayer<=leftRight)
+            {
+                xPositionPlayer += 10;
+
+                objectName.style.left = xPositionPlayer;
+            }
+        }
+
+        function fire(objectName)
+        {
+            // Moves the bullet over the barrel
+            xPostionBullet = xPositionPlayer + 14;
+            objectName.style.left = xPostionBullet;
+
+            // Loads bullet noise and fires
+            var bulletNoise = new Audio("PewNoise.wav");
+
+            // Makes the bullet appear 
+            objectName.style.visibility = "visible";
+
+            // Plays bullet noise
+            bulletNoise.play();
+
+            // Sets the timer which moves the bullet upward
+            // In this case the passed parameter objectName holds the bullet variable
+            playerBulletTimer = window.setInterval(bulletMoveUp, 17);
+        }
+
+        function bulletMoveUp()
+        {
+            // moves the position marker up the screen
+            yPositionBullet -= 10;
+
+            // Sets the bullet to the postion marker
+            bullet.style.top = yPositionBullet;
+
+            // Checks if bullet has hit the enemy ------ Appears the be the exact distance between the first enemy 38
+            if (yPositionBullet == yPositionEnemy & (xPostionBullet>=(xPositionEnemy+23) & xPostionBullet<=(xPositionEnemy+60) ) )
+            {
+                destroyEnemy();
+                resetBulletPlayer();
+                
+            }
+            else if (yPositionBullet == topTop)
+            {
+                resetBulletPlayer();
+            }
+        }
+
+        function resetBulletPlayer()
+        {
+            window.clearInterval(playerBulletTimer);
+            bullet.style.visibility = "hidden";
+            yPositionBullet = bottomTop + 20;
+        }
+
+        function destroyEnemy(enemyName)
+        {
+            // Gets the enemy class which holds the different sprites for normal and destroyed versions
+            enemy = window.document.getElementsByClassName("enemy");
+            enemy[0].style.visibility = "hidden";
+            enemy[1].style.visibility = "visible";
+
+            // plays a destruction sound
+            var explosion = new Audio("Destroy.wav");
+            explosion.play();
+            
+            // Sets different sprites to appear/disapear after a set time
+            // ()=> instead of function()
+            explosionAnimation = window.setTimeout(()=>{
+                                        enemy[1].style.visibility = "hidden";
+                                        enemy[2].style.visibility = "visible"; 
+                                                                           }, 200);
+                                                                         
+            explosionAnimation = window.setTimeout(()=>{
+                                        enemy[2].style.visibility = "hidden";
+                                        enemy[3].style.visibility = "visible"; 
+                                                                           }, 500);
+                                                                           
+            explosionAnimation = window.setTimeout(()=>{
+                                        enemy[3].style.visibility = "hidden"; 
+                                                                           }, 1000);
+                                                                                                                                      
+        }
+
+        function setUpEnemy()
+        {   
+            // initialises the enemy sprite positon variables to be later manipulated
+            enemy = window.document.getElementsByClassName("enemy");
+            for (var i=0; i<enemy.length; i++)
+            {
+                enemy[i].style.left = xPositionEnemy;
+                enemy[i].style.top = yPositionEnemy;
+            }
+            
+            // Calls fucntion to start enemy movment needs intermidatary function when on click and set interval is sued
+            // Sets the initial direction 
+            isEnemyMovingRight = true;
+            moveEnemy()
+        }
+
+        function moveEnemy()
+        { 
+            if (isEnemyMovingRight)
+            {
+                enemyMoveTimer = window.setInterval(enemyMoveRight, 38);
+            }
+
+            if (!isEnemyMovingRight)
+            {
+                enemyMoveTimer = window.setInterval(enemyMoveLeft, 38);
+            }   
+        }
+
+        function enemyMoveLeft()
+        {
+            if (xPositionEnemy>=leftLeft)
+            {
+                xPositionEnemy -= 10;
+                
+                for (var i=0; i<enemy.length; i++)
+                {
+                    enemy[i].style.left = xPositionEnemy;
+                }
+            }
+            else 
+            {
+                yPositionEnemy += 30;
+
+                for (var i=0; i<enemy.length; i++)
+                {
+                    enemy[i].style.top = yPositionEnemy;
+                }
+                
+                isEnemyMovingRight = true;
+                window.clearInterval(enemyMoveTimer);
+                moveEnemy();
+            }
+            
+        }
+
+        function enemyMoveRight()
+        {
+           // console.log(xPositionEnemy);
+            if (xPositionEnemy<=(leftRight-50))
+            {
+                xPositionEnemy += 10;
+            
+                for (var i=0; i<enemy.length; i++)
+                {
+                    enemy[i].style.left = xPositionEnemy;
+                }
+                
+            }
+            else
+            {
+                yPositionEnemy += 30;
+
+                for (var i=0; i<enemy.length; i++)
+                {
+                    enemy[i].style.top = yPositionEnemy;
+                }
+
+                isEnemyMovingRight = false;
+                window.clearInterval(enemyMoveTimer);
+                moveEnemy();
+                
+            }
+           
+
+        }
+
+
+    </script>
+
+    <head>
+        <style>
+
+            #bullet
+            {
+                position: absolute;
+                top: 520px;
+                left: 64px;
+                visibility: hidden;
+            }
+
+            #gun
+            {
+                position: absolute;
+                top: 500px;
+                left: 450px;
+            }
+
+            .enemy
+            {
+                position: absolute;
+                top: 100px;
+                left: 50px;
+            }
+
+        </style>
+    </head>
+
+    <body onkeydown="keyListen()" onclick="setUpEnemy()">
+
+        <!-----------------Player Bullet and gun barrell--------------->
+        <span id="bullet" >*</span>
+
+        <span id="gun">
+           <pre>
+  _
+_| |_
+            </pre>
+        </span>
+
+
+        <!-----------------------Enemy sprites-------------------------->
+        <span id="enemy" class="enemy" >
+            <pre>
+
+   /MM\
+   \~~/
+
+                </pre>
+             </span>
+
+        <span id="enemyExplosion" class="enemy" style="visibility: hidden">
+            <pre>
+ "*"  "*"         
+"* /MM\ *"
+"* \~~/ *"
+ "*"  "*"
+            </pre>
+        </span>             
+
+        <span id="enemyExplosionAfter" class="enemy" style="visibility: hidden">
+                <pre>
+ "*"  "*"         
+"*      *"
+"*      *"
+ "*"  "*"
+                </pre>
+        </span>
+ 
+        <span id="enemyExplosionAfterAfter" class="enemy" style="visibility: hidden">
+                <pre>
+  ~    ~         
+ ~      ~
+ ~      ~
+  ~    ~ 
+                </pre>
+        </span>        
+        
+
+
+
+    </body>
+</html>

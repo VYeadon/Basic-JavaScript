@@ -1,0 +1,141 @@
+<html>
+    <script type="text/javascript">
+
+        var fSize=20;
+
+        function followFontSize()
+        {
+            var x = window.event.clientX;
+            var y = window.event.clientY;
+
+            if (event.ctrlKey)
+            {
+                fSize++;
+            }
+            if (event.altKey)
+            {
+                fSize--;
+            }
+
+            var word = window.document.getElementById("text");
+
+            word.style.left = x;
+            word.style.top = y;
+
+            word.style.fontSize = fSize;
+        }
+    
+        function colourChanger(boxElement)
+        {
+            var txt = window.document.getElementById("text");
+            // Need to get computed style as colour is given within the CSS style sheet
+            txt.style.color = window.getComputedStyle(boxElement).backgroundColor
+        }
+
+    </script>
+
+    <head>
+        <style>
+            #body 
+            {
+                background-color: darkgray; 
+            }
+
+            #text
+            {
+                position: absolute;
+                color: aliceblue;
+                font-family: 'Trebuchet MS';
+                font-size: 20;
+            }
+
+            #topLeftBox
+            {
+                position: absolute;
+                background-color: blue;
+                width: 200px;
+                height: 200px;
+                top: 10%;
+                left: 15%;
+            }
+
+            #topRightBox
+            {
+                position: absolute;
+                background-color:coral;
+                width: 200px;
+                height: 200px;
+                top: 10%;
+                right: 15%;
+            }
+
+            #middleLeftBox
+            {
+                position: absolute;
+                background-color:crimson;
+                width: 200px;
+                height: 200px;
+                top: 40%;
+                left: 15%;
+            }
+
+            #middleRightBox
+            {
+                position: absolute;
+                background-color:darkolivegreen;
+                width: 200px;
+                height: 200px;
+                top: 40%;
+                right: 15%;
+            }
+
+            #bottomLeftBox
+            {
+                position: absolute;
+                background-color:darkviolet;
+                width: 200px;
+                height: 200px;
+                bottom: 10%;
+                left: 15%;
+            }
+
+            #bottomRightBox
+            {
+                position: absolute;
+                background-color:goldenrod;
+                width: 200px;
+                height: 200px;
+                bottom: 10%;
+                right: 15%;
+            }
+
+
+        </style>
+    </head>
+
+    <body id="body" onmousemove="followFontSize()" onclick="fontChange()">
+
+        <span id="topLeftBox" onmouseenter="colourChanger(this)">
+        </span>
+
+        <div id="topRightBox" onmouseover="colourChanger(this)">
+        </div>
+
+        <span id="middleLeftBox" onmouseenter="colourChanger(this)">    
+        </span>
+
+        <div id="middleRightBox" onmouseenter="colourChanger(this)">    
+        </div>
+
+        <span id="bottomLeftBox" onmouseenter="colourChanger(this)">
+        </span>
+
+        <div id="bottomRightBox" onmouseenter="colourChanger(this)">   
+        </div>
+
+        <span id="text">
+            Quaaaaa-A
+        </span>
+
+    </body>
+</html>
